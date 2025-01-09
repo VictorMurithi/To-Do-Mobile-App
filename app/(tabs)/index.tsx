@@ -9,7 +9,7 @@ export default function Index() {
     { id: "2", title: "Review Pull Requests", dueDate: "Jan 11, 2025", status: "Completed" },
     { id: "3", title: "Prepare Presentation", dueDate: "Jan 12, 2025", status: "Pending" },
   ];
-  
+
   // Static data for categories
   const categories = [
     { id: "1", name: "To-do", icon: "checkmark-circle-outline" },
@@ -63,7 +63,7 @@ export default function Index() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.categoryCard}>
-              <Ionicons name={item.icon} size={24} color="#0D47A1" />
+              <Ionicons name={item.icon as "checkmark-circle-outline" | "time-outline" | "checkmark-done-circle-outline"} size={24} color="#0D47A1" />
               <Text style={styles.categoryText}>{item.name}</Text>
             </TouchableOpacity>
           )}
