@@ -1,10 +1,34 @@
 import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
-    <Tabs>
-      <Tabs.Screen name="index" options={{ title: 'Home' }} />
-      <Tabs.Screen name="taskDate" options={{ title: 'Task and Date' }} />
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: '#0D47A1',
+      }}
+    >
+      {/* Home Screen */}
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
+          ),
+        }}
+      />
+
+      {/* Task/Date Screen */}
+      <Tabs.Screen
+        name="taskDate"
+        options={{
+          title: 'Task and Date',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={24} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
