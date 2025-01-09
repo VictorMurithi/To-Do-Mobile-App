@@ -9,7 +9,7 @@ export default function Index() {
     { id: "2", title: "Review Pull Requests", dueDate: "Jan 11, 2025", status: "Completed" },
     { id: "3", title: "Prepare Presentation", dueDate: "Jan 12, 2025", status: "Pending" },
   ];
-
+  
   // Static data for categories
   const categories = [
     { id: "1", name: "To-do", icon: "checkmark-circle-outline" },
@@ -57,11 +57,10 @@ export default function Index() {
       {/* Categories Section */}
       <View style={styles.categoriesContainer}>
         <Text style={styles.sectionTitle}>Categories</Text>
-        {/* Display categories horizontally */}
         <FlatList
-          horizontal // Enable horizontal scrolling
+          horizontal
           data={categories} // Data source for the list
-          keyExtractor={(item) => item.id} // Unique key for each item
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.categoryCard}>
               <Ionicons name={item.icon} size={24} color="#0D47A1" />
@@ -72,7 +71,6 @@ export default function Index() {
         />
       </View>
 
-      {/* Floating Action Button */}
       <TouchableOpacity style={styles.add}>
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
