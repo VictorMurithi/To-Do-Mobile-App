@@ -1,8 +1,10 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export default function Index() {
+  const router = useRouter();
   // Static data for tasks
   const tasks = [
     { id: "1", title: "Complete React Native Project", dueDate: "Jan 10, 2025", status: "Pending" },
@@ -71,7 +73,10 @@ export default function Index() {
         />
       </View>
 
-      <TouchableOpacity style={styles.add}>
+      <TouchableOpacity
+        style={styles.add}
+        onPress={() => router.push("/addTask")}
+        >
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
     </View>

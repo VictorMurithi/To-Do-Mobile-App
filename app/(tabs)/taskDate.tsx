@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Calendar } from 'react-native-calendars';
+import {useRouter} from 'expo-router';
 
 export default function TaskDate() {
+    const router = useRouter();
     // State for the currently selected date
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -51,7 +53,10 @@ export default function TaskDate() {
             </View>
 
             {/* Add Task Button */}
-            <TouchableOpacity style={styles.addButton}>
+            <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => router.push('/addTask')}
+                >
                 <Ionicons name="add-circle" size={40} color="#0D47A1" />
                 <Text style={styles.addText}>Add Task</Text>
             </TouchableOpacity>

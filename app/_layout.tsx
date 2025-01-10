@@ -4,6 +4,7 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name= "addTask" options={{ title: "Add Task" }} />
     </Stack>
   );
 }
