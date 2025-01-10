@@ -5,8 +5,11 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 export default function AddTask() {
   const [title, setTitle] = useState("");
@@ -15,7 +18,34 @@ export default function AddTask() {
   const [category, setCategory] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const router = useRouter();
   const categories = ["To-do", "Pending", "Completed"];
+
+  const saveTask = async () => {
+    if (!title || !category) {
+      Alert.alert("Error", "Title and category are required.");
+      return;
+    }
+
+    const newTask = {
+      id: Date.now().toString(),
+      title,
+      dueDate: date.toDateString(),
+      description,
+      status: category,
+    };
+
+    try {
+      const existingTasks = await AsyncStorage.getItem("tasks");
+      const tasks = existingTasks ? JSON.parse(existingTasks) : [];
+      tasks.push(newTask);
+      await AsyncStorage.setItem("tasks", JSON.stringify(tasks));
+      Alert.alert("Success", "Task added successfully!");
+      router.push("/");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save the task.");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -31,7 +61,7 @@ export default function AddTask() {
         />
       </View>
 
-      {/*Date Section */}
+      {/* Date Section */}
       <View style={styles.inputSection}>
         <Text style={styles.label}>Date</Text>
         <TouchableOpacity
@@ -47,7 +77,7 @@ export default function AddTask() {
             value={date}
             mode="date"
             display="default"
-            onChange={(selectedDate: Date) => {
+            onChange={(event, selectedDate) => {
               setShowDatePicker(false);
               if (selectedDate) setDate(selectedDate);
             }}
@@ -95,7 +125,7 @@ export default function AddTask() {
       </View>
 
       {/* Create Task Button */}
-      <TouchableOpacity style={styles.createTaskButton}>
+      <TouchableOpacity style={styles.createTaskButton} onPress={saveTask}>
         <Text style={styles.createTaskButtonText}>Create Task</Text>
       </TouchableOpacity>
     </View>

@@ -1,17 +1,12 @@
-import React from "react";
+import React,{ useEffect, useState} from "react";
 import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
   const router = useRouter();
-  // Static data for tasks
-  const tasks = [
-    { id: "1", title: "Complete React Native Project", dueDate: "Jan 10, 2025", status: "Pending" },
-    { id: "2", title: "Review Pull Requests", dueDate: "Jan 11, 2025", status: "Completed" },
-    { id: "3", title: "Prepare Presentation", dueDate: "Jan 12, 2025", status: "Pending" },
-  ];
-
+  const [tasks, setTasks] = useState([]);
   // Static data for categories
   const categories = [
     { id: "1", name: "To-do", icon: "checkmark-circle-outline" },
@@ -19,6 +14,20 @@ export default function Index() {
     { id: "3", name: "Completed", icon: "checkmark-done-circle-outline" },
   ];
 
+  const loadTasks = async () => {
+    try {
+      const storedTasks = await AsyncStorage.getItem("tasks");
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
+    } catch (error) {
+      console.error("Error loading tasks:", error);
+    }
+  }
+
+  useEffect(() => {
+    loadTasks();
+  })
   return (
     <View style={styles.container}>
       {/* Greeting Section */}
