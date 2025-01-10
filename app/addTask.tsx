@@ -11,12 +11,20 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
+interface Task {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+  status: string;
+}
+
 export default function AddTask() {
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [title, setTitle] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const router = useRouter();
   const categories = ["To-do", "Pending", "Completed"];
@@ -27,7 +35,7 @@ export default function AddTask() {
       return;
     }
 
-    const newTask = {
+    const newTask: Task = {
       id: Date.now().toString(),
       title,
       dueDate: date.toDateString(),
@@ -37,7 +45,7 @@ export default function AddTask() {
 
     try {
       const existingTasks = await AsyncStorage.getItem("tasks");
-      const tasks = existingTasks ? JSON.parse(existingTasks) : [];
+      const tasks: Task[] = existingTasks ? JSON.parse(existingTasks) : [];
       tasks.push(newTask);
       await AsyncStorage.setItem("tasks", JSON.stringify(tasks));
       Alert.alert("Success", "Task added successfully!");
@@ -77,7 +85,7 @@ export default function AddTask() {
             value={date}
             mode="date"
             display="default"
-            onChange={(event, selectedDate) => {
+            onChange={(selectedDate: any) => {
               setShowDatePicker(false);
               if (selectedDate) setDate(selectedDate);
             }}

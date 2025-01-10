@@ -1,14 +1,29 @@
-import React,{ useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+interface Task {
+  id: string;
+  title: string;
+  dueDate: string;
+  description: string;
+  status: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  icon: "checkmark-circle-outline" | "time-outline" | "checkmark-done-circle-outline";
+}
+
 export default function Index() {
   const router = useRouter();
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  
   // Static data for categories
-  const categories = [
+  const categories: Category[] = [
     { id: "1", name: "To-do", icon: "checkmark-circle-outline" },
     { id: "2", name: "Pending", icon: "time-outline" },
     { id: "3", name: "Completed", icon: "checkmark-done-circle-outline" },
@@ -18,16 +33,17 @@ export default function Index() {
     try {
       const storedTasks = await AsyncStorage.getItem("tasks");
       if (storedTasks) {
-        setTasks(JSON.parse(storedTasks));
+        setTasks(JSON.parse(storedTasks) as Task[]);
       }
     } catch (error) {
       console.error("Error loading tasks:", error);
     }
-  }
+  };
 
   useEffect(() => {
     loadTasks();
-  })
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Greeting Section */}
@@ -58,7 +74,7 @@ export default function Index() {
                 </Text>
               </View>
               {/* Task due date */}
-              <Text style={styles.taskDueDate}>Due: {item.dueDate}</Text>
+              <Text style={styles.taskDueDate}>Date: {item.dueDate}</Text>
             </View>
           )}
           showsVerticalScrollIndicator={false} // Hide scroll indicator
@@ -74,7 +90,11 @@ export default function Index() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.categoryCard}>
-              <Ionicons name={item.icon as "checkmark-circle-outline" | "time-outline" | "checkmark-done-circle-outline"} size={24} color="#0D47A1" />
+              <Ionicons
+                name={item.icon}
+                size={24}
+                color="#0D47A1"
+              />
               <Text style={styles.categoryText}>{item.name}</Text>
             </TouchableOpacity>
           )}
@@ -82,10 +102,11 @@ export default function Index() {
         />
       </View>
 
+      {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.add}
         onPress={() => router.push("/addTask")}
-        >
+      >
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
     </View>
@@ -93,13 +114,11 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  // Overall container styling
   container: {
     flex: 1,
     backgroundColor: "#E3F2FD",
     padding: 20,
   },
-  // Greeting section styling
   greetingContainer: {
     marginTop: 30,
   },
@@ -113,7 +132,6 @@ const styles = StyleSheet.create({
     color: "#0D47A1",
     marginTop: 5,
   },
-  // Task overview section styling
   taskOverview: {
     marginTop: 20,
   },
@@ -141,17 +159,16 @@ const styles = StyleSheet.create({
   },
   taskStatus: {
     fontSize: 14,
-    color: "#FF5722", // Orange color for "Pending" tasks
+    color: "#FF5722", // Orange for "Pending" tasks
   },
   taskStatusCompleted: {
-    color: "#4CAF50", // Green color for "Completed" tasks
+    color: "#4CAF50", // Green for "Completed" tasks
   },
   taskDueDate: {
     marginTop: 5,
     fontSize: 14,
-    color: "#757575", // Gray color for due date text
+    color: "#757575", // Gray for due date text
   },
-  // Categories section styling
   categoriesContainer: {
     marginTop: 30,
   },
@@ -168,15 +185,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#0D47A1",
   },
-  // Floating action button styling
   add: {
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#0D47A1", // Blue background for the button
+    backgroundColor: "#0D47A1", // Blue background
     width: 60,
     height: 60,
-    borderRadius: 30, // Circular shape
+    borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
     elevation: 5, // Shadow effect
