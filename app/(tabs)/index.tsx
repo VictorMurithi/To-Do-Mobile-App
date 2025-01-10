@@ -40,6 +40,16 @@ export default function Index() {
     }
   };
 
+  const handleDelete = async (taskId: string) => {
+    try {
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
+      await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
   useEffect(() => {
     loadTasks();
   }, []);
@@ -55,13 +65,11 @@ export default function Index() {
       {/* Task Overview Section */}
       <View style={styles.taskOverview}>
         <Text style={styles.sectionTitle}>My Tasks</Text>
-        {/* Display tasks in a scrollable list */}
         <FlatList
-          data={tasks} // Data source for the list
-          keyExtractor={(item) => item.id} // Unique key for each item
+          data={tasks}
+          keyExtractor={(item) => item.id} 
           renderItem={({ item }) => (
             <View style={styles.taskCard}>
-              {/* Task header with title and status */}
               <View style={styles.taskCardHeader}>
                 <Text style={styles.taskTitle}>{item.title}</Text>
                 <Text
@@ -75,6 +83,9 @@ export default function Index() {
               </View>
               {/* Task due date */}
               <Text style={styles.taskDueDate}>Date: {item.dueDate}</Text>
+              <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
+                <Ionicons name="trash" size={20} color="#D32F2F" />
+              </TouchableOpacity>
             </View>
           )}
           showsVerticalScrollIndicator={false} // Hide scroll indicator
@@ -151,7 +162,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
+    position: "relative",
+  },  
   taskTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -197,4 +209,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 5, // Shadow effect
   },
+  deleteButton: {
+    backgroundColor: "#FFCDD2", // Light red background
+    borderRadius: 50, // Circular button
+    padding: 8, // Padding for the icon
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-start", // Align it to the left (or adjust based on the layout)
+    marginTop: 10, // Add some margin to separate from other elements
+  },
+  
 });
