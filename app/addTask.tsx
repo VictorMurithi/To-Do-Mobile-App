@@ -30,8 +30,13 @@ export default function AddTask() {
   const categories = ["To-do", "Pending", "Completed"];
 
   const saveTask = async () => {
-    if (!title || !category) {
-      Alert.alert("Error", "Title and category are required.");
+    if (!title.trim() || title.length < 3 || title.length > 50) {
+      Alert.alert("Error", "Title must be between 3 and 50 characters and cannot be empty.");
+      return;
+    }
+
+    if (!category) {
+      Alert.alert("Error", "Category is required.");
       return;
     }
 
@@ -44,16 +49,24 @@ export default function AddTask() {
     };
 
     try {
-      const existingTasks = await AsyncStorage.getItem("tasks");
-      const tasks: Task[] = existingTasks ? JSON.parse(existingTasks) : [];
-      tasks.push(newTask);
-      await AsyncStorage.setItem("tasks", JSON.stringify(tasks));
-      Alert.alert("Success", "Task added successfully!");
-      router.push("/");
+        const existingTasks = await AsyncStorage.getItem("tasks");
+        const tasks: Task[] = existingTasks ? JSON.parse(existingTasks) : [];
+
+        // Check for uniqueness of title
+        const isTitleUnique = !tasks.some(task => task.title === newTask.title);
+        if (!isTitleUnique) {
+            Alert.alert("Error", "Title must be unique among existing tasks.");
+            return;
+        }
+
+        tasks.push(newTask);
+        await AsyncStorage.setItem("tasks", JSON.stringify(tasks));
+        Alert.alert("Success", "Task added successfully!");
+        router.push("/");
     } catch (error) {
-      Alert.alert("Error", "Failed to save the task.");
+        Alert.alert("Error", "Failed to save the task.");
     }
-  };
+};
 
   return (
     <View style={styles.container}>
@@ -97,7 +110,7 @@ export default function AddTask() {
       <View style={styles.inputSection}>
         <Text style={styles.label}>Description</Text>
         <TextInput
-          style={[styles.input, styles.textArea]}
+          style={styles.input}
           placeholder="Enter task description"
           placeholderTextColor="#757575"
           multiline
@@ -161,10 +174,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     color: "#0D47A1",
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
   },
   datePickerButton: {
     backgroundColor: "#FFFFFF",
