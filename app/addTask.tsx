@@ -14,7 +14,7 @@ import { useRouter } from "expo-router";
 interface Task {
   id: string;
   title: string;
-  date: string;
+  dueDate: string;
   description: string;
   status: string;
 }
@@ -38,7 +38,7 @@ export default function AddTask() {
     const newTask: Task = {
       id: Date.now().toString(),
       title,
-      dueDate: date.toDateString(),
+      dueDate: date.toISOString().split('T')[0],  // Ensuring consistent date format
       description,
       status: category,
     };

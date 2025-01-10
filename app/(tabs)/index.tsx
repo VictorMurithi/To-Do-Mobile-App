@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 interface Task {
   id: string;
@@ -55,9 +54,7 @@ export default function Index() {
   }, []);
 
   return (
-    <GestureHandlerRootView>
-      <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.greetingContainer}>
         <Text style={styles.greetingText}>Hello,</Text>
         <Text style={styles.subGreetingText}>Welcome to TaskLister!</Text>
@@ -118,9 +115,6 @@ export default function Index() {
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
     </View>
-      </ScrollView>
-    </GestureHandlerRootView>
-    
   );
 }
 
