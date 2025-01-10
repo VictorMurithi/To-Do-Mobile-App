@@ -37,6 +37,17 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      {/* Completed Screen */}
+      <Tabs.Screen
+        name="completeTasks"
+        options={{
+          title: 'Completed Tasks',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'checkmark-circle' : 'checkmark-circle-outline'} size={24} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
