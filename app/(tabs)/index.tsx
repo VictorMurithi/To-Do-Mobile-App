@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 interface Task {
   id: string;
@@ -22,7 +23,6 @@ export default function Index() {
   const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
   
-  // Static data for categories
   const categories: Category[] = [
     { id: "1", name: "To-do", icon: "checkmark-circle-outline" },
     { id: "2", name: "Pending", icon: "time-outline" },
@@ -55,19 +55,19 @@ export default function Index() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {/* Greeting Section */}
+    <GestureHandlerRootView>
+      <ScrollView>
+      <View style={styles.container}>
       <View style={styles.greetingContainer}>
         <Text style={styles.greetingText}>Hello,</Text>
         <Text style={styles.subGreetingText}>Welcome to TaskLister!</Text>
       </View>
 
-      {/* Task Overview Section */}
       <View style={styles.taskOverview}>
         <Text style={styles.sectionTitle}>My Tasks</Text>
         <FlatList
           data={tasks}
-          keyExtractor={(item) => item.id} 
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.taskCard}>
               <View style={styles.taskCardHeader}>
@@ -75,29 +75,27 @@ export default function Index() {
                 <Text
                   style={[
                     styles.taskStatus,
-                    item.status === "Completed" && styles.taskStatusCompleted, // Style change based on status
+                    item.status === "Completed" && styles.taskStatusCompleted,
                   ]}
                 >
                   {item.status}
                 </Text>
               </View>
-              {/* Task due date */}
               <Text style={styles.taskDueDate}>Date: {item.dueDate}</Text>
               <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
                 <Ionicons name="trash" size={20} color="#D32F2F" />
               </TouchableOpacity>
             </View>
           )}
-          showsVerticalScrollIndicator={false} // Hide scroll indicator
+          showsVerticalScrollIndicator={false}
         />
       </View>
 
-      {/* Categories Section */}
       <View style={styles.categoriesContainer}>
         <Text style={styles.sectionTitle}>Categories</Text>
         <FlatList
           horizontal
-          data={categories} // Data source for the list
+          data={categories}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.categoryCard}>
@@ -109,11 +107,10 @@ export default function Index() {
               <Text style={styles.categoryText}>{item.name}</Text>
             </TouchableOpacity>
           )}
-          showsHorizontalScrollIndicator={false} // Hide scroll indicator
+          showsHorizontalScrollIndicator={false}
         />
       </View>
 
-      {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.add}
         onPress={() => router.push("/addTask")}
@@ -121,6 +118,9 @@ export default function Index() {
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
     </View>
+      </ScrollView>
+    </GestureHandlerRootView>
+    
   );
 }
 
@@ -162,8 +162,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    position: "relative",
-  },  
+  },
   taskTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -171,15 +170,15 @@ const styles = StyleSheet.create({
   },
   taskStatus: {
     fontSize: 14,
-    color: "#FF5722", // Orange for "Pending" tasks
+    color: "#FF5722",
   },
   taskStatusCompleted: {
-    color: "#4CAF50", // Green for "Completed" tasks
+    color: "#4CAF50",
   },
   taskDueDate: {
     marginTop: 5,
     fontSize: 14,
-    color: "#757575", // Gray for due date text
+    color: "#757575",
   },
   categoriesContainer: {
     marginTop: 30,
@@ -201,22 +200,22 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#0D47A1", // Blue background
+    backgroundColor: "#0D47A1",
     width: 60,
     height: 60,
     borderRadius: 30,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 5, // Shadow effect
+    elevation: 5,
   },
   deleteButton: {
-    backgroundColor: "#FFCDD2", // Light red background
-    borderRadius: 50, // Circular button
-    padding: 8, // Padding for the icon
+    backgroundColor: "#FFCDD2",
+    borderRadius: 50,
+    padding: 8,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "flex-start", // Align it to the left (or adjust based on the layout)
-    marginTop: 10, // Add some margin to separate from other elements
+    // alignSelf: "flex-end",
+    marginTop: 10,
   },
-  
 });
+
