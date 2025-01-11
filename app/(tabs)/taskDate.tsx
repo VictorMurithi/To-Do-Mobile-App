@@ -24,7 +24,6 @@ export default function TaskDate() {
             const storedTasks = await AsyncStorage.getItem('tasks');
             if (storedTasks) {
                 setTasks(JSON.parse(storedTasks));
-                console.log("Tasks loaded:", JSON.parse(storedTasks));
             }
         } catch (error) {
             console.error('Error loading tasks:', error);
