@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -83,7 +83,7 @@ export default function Index() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.greetingContainer}>
         <Text style={styles.greetingText}>Hello,</Text>
         <Text style={styles.subGreetingText}>Welcome to TaskLister!</Text>
@@ -143,7 +143,7 @@ export default function Index() {
       >
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
   },
   categoriesContainer: {
     marginTop: 30,
+    marginBottom: 25,
   },
   categoryCard: {
     backgroundColor: "white",
