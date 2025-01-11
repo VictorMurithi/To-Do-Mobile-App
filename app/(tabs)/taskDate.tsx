@@ -56,20 +56,22 @@ export default function TaskDate() {
 
             {/* Task List Section */}
             <View style={styles.taskListContainer}>
-                <FlatList
-                    data={filteredTasks}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                    <View style={styles.taskCard}>
-                        <Text style={styles.text}>{item.title}</Text>
-                    </View>
-                    )}
-                    ListEmptyComponent={
-                    <View style={styles.noTasksContainer}>
-                        <Text style={styles.noTasksText}>No tasks for this day</Text>
-                    </View>
-                    }
-                />
+            <FlatList
+                data={filteredTasks}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                <View style={styles.taskCard}>
+                    <Text style={styles.text}>{item.title}</Text>
+                </View>
+                )}
+                ListEmptyComponent={
+                <View style={styles.noTasksContainer}>
+                    <Text style={styles.noTasksText}>No tasks for this day</Text>
+                </View>
+                }
+                contentContainerStyle={{ paddingBottom: 16 }}
+            />
+
             </View>
 
 
@@ -107,10 +109,14 @@ const styles = StyleSheet.create({
     },
     taskCard: {
         padding: 16,
-        backgroundColor: '#BBDEFB',
-        marginVertical: 4,
-        borderRadius: 4,
-    },
+        backgroundColor: 'white',
+        marginVertical: 8,
+        marginHorizontal: 8,
+        borderRadius: 8,
+        elevation: 2,
+        borderLeftWidth: 4,
+        borderLeftColor: '#0D47A1',
+    },    
     text: {
         color: '#0D47A1',
         textAlign: 'center',
